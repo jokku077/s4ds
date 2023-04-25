@@ -1,0 +1,15 @@
+f1=open("file1.txt","r")
+s=f1.read()
+print("File contents: ",s)
+l=s.split()
+del(l[0])
+print("\nprime numbers are: ")
+for i in l:
+	flag=1
+	k=int(i)
+	for j in range(2,(k//2)+1):
+		if(k%j==0):
+			flag=0
+			break
+	if(flag==1):
+		print(k,end=" ")
