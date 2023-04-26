@@ -1,0 +1,195 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct process
+{
+    int pid,at,wat,ct,tat,bt;
+}a[10];
+void fcfs()
+{
+    int n,ct,twat=0,ttat=0; //number of processes, completion time, total wait time, total turn around time
+    float avgwat,avgtat; //average wait time, average turn around time
+    puts("Enter the number of processes ");
+    scanf("%i",&n);
+    for (int i=0;i<n;i++)
+    {
+        a[i].pid=i+1;
+        puts("arrival time and burst time ");
+        scanf("%d %d",&a[i].at,&a[i].bt);
+    }
+    puts("The table is ");
+    printf("process id\t arrival time\t burst time\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt);
+    }
+    //sorting structures on the basis of their arrival time
+    for (int i=0;i<n-1;i++)
+    {
+        for(int j=0;j<n-i-1;j++)
+        {
+            if (a[j].at>a[j+1].at)
+            {
+                struct process temp = a[j];
+                a[j]=a[j+1];
+                a[j+1]=temp;
+            }
+        }
+    }
+    //completion time calculations
+    a[0].ct=a[0].bt-a[0].at;
+    for (int i=1;i<n;i++)
+    {
+        a[i].ct=a[i-1].ct+a[i].bt;
+    }
+    //turnaround time calculations
+
+    for (int i=0;i<n;i++)
+    {
+        a[i].tat=a[i].ct-a[i].at;
+        ttat=ttat+a[i].tat;
+    }
+    //waiting time calculations
+    for (int i=0;i<n;i++)
+    {
+        a[i].wat=a[i].tat-a[i].bt;
+        twat=twat+a[i].wat;
+    }
+    printf("\n\nprocess id\t arrival time\t burst time\t\t completion time\t turn around\t\t\twait time\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\t\t\t%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt,a[i].ct,a[i].tat,a[i].wat);
+    }
+    //to find the average
+    avgwat=twat/(1.0*n);
+    avgtat=ttat/(1.0*n);
+    printf("\n\nAverage TAT = %f\nAverage WAT = %f\n",avgtat,avgwat);
+    //gantt chart
+    puts("\n\nGantt chart\n ");
+    printf("Process id\t\t");
+    for (int i=0;i<n;i++)
+    {
+        printf("%i\t",a[i].pid);
+    }
+    printf("\n");
+}
+void sjf()
+{
+    int n,ct,twat=0,ttat=0; //number of processes, completion time, total wait time, total turn aroundtime
+    float avgwat,avgtat; //average wait time, average turn around time
+    puts("Enter the number of processes ");
+    scanf("%i",&n);
+    for (int i=0;i<n;i++)
+    {
+        a[i].pid=i+1;
+        puts("arrival time and burst time ");
+        scanf("%d %d",&a[i].at,&a[i].bt);
+    }
+    puts("The table is ");
+    printf("process id\t arrival time\t burst time\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt);
+    }
+
+    
+
+//sorting structures on the basis of their burst time
+    for (int i=0;i<n-1;i++)
+    {
+        for(int j=0;j<n-i-1;j++)
+        {
+            if (a[j].bt>a[j+1].bt)
+            {
+                struct process temp = a[j];
+                a[j]=a[j+1];
+                a[j+1]=temp;
+            }
+        }
+    }
+printf("\nprocess id\t arrival time\t burst time\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt);
+    }
+    
+    //first arriving element
+    int min=a[0].at;
+    int minstructpos;
+    struct process minstruct;
+
+    //to find the smallest
+    for (int i=1;i<n;i++)
+    {
+        if (a[i].at<min)
+        {
+            min=a[i].at;
+            minstruct=a[i];
+            minstructpos=i;
+        }
+    }
+    for (int i=minstructpos;i>=0;i--)
+    {
+        a[i]=a[i-1];
+    }
+    a[0]=minstruct;
+    
+    printf("\nprocess id\t arrival time\t burst time\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt);
+    }
+    
+
+
+    //completion time calculations
+    a[0].ct=a[0].bt-a[0].at;
+    for (int i=1;i<n;i++)
+    {
+        a[i].ct=a[i-1].ct+a[i].bt;
+    }
+    //turnaround time calculations
+    for (int i=0;i<n;i++)
+    {
+        a[i].tat=a[i].ct-a[i].at;
+        ttat=ttat+a[i].tat;
+    }
+    //waiting time calculations
+    for (int i=0;i<n;i++)
+    {
+        a[i].wat=a[i].tat-a[i].bt;
+        twat=twat+a[i].wat;
+    }
+    printf("\n\nprocess id\t arrival time\t burst time\t\t completion time\t turn around\t\t\twaittime\n");
+    for (int i=0;i<n;i++)
+    {
+        printf("%d\t\t\t%d\t\t\t%d\t\t\t%d\t\t\t%d\t\t\t%d\n",a[i].pid,a[i].at,a[i].bt,a[i].ct,a[i].tat,a[i].wat);
+    }
+    //to find the average
+    avgwat=twat/(1.0*n);
+    avgtat=ttat/(1.0*n);
+    printf("\n\nAverage TAT = %f\nAverage WAT = %f\n",avgtat,avgwat);
+    //gantt chart
+    puts("\n\nGantt chart\n ");
+    printf("Process id\t\t");
+
+    for (int i=0;i<n;i++)
+    {
+    printf("%i\t",a[i].pid);
+    }
+    printf("\n");
+}
+void main()
+{
+    puts("Press 1 for fcfs, 2 for sjf ");
+    int ch;
+    scanf("%i",&ch);
+    if (ch==1) 
+    {
+        fcfs();
+    }
+    else if (ch==2) 
+    {
+        sjf();
+    }
+
+}
